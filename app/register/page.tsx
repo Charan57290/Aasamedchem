@@ -75,12 +75,12 @@ export default function RegisterPage() {
     }
   };
 
-  if (status === "loading" || status === "authenticated") {
+  if (status === "authenticated") {
     return (
       <div className="min-h-screen flex items-center justify-center bg-slate-950 text-slate-100">
         <div className="flex flex-col items-center gap-3">
           <Loader2 className="h-8 w-8 animate-spin text-teal-400" />
-          <p className="text-slate-400 text-sm">Loading session...</p>
+          <p className="text-slate-400 text-sm">Redirecting...</p>
         </div>
       </div>
     );
