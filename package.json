@@ -9,9 +9,10 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@prisma/client": "^5.0.0",
     "@base-ui/react": "^1.5.0",
     "@hookform/resolvers": "^5.4.0",
-    "@prisma/client": "^5.22.0",
+
     "@radix-ui/react-label": "^2.1.8",
     "@radix-ui/react-slot": "^1.2.4",
     "bcryptjs": "^3.0.3",
@@ -32,6 +33,7 @@
     "goober": "^2.1.19"
   },
   "devDependencies": {
+    "prisma": "^5.22.0",
     "@tailwindcss/postcss": "^4",
     "@types/bcryptjs": "^2.4.6",
     "@types/node": "^20",

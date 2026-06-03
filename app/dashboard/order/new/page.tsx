@@ -253,7 +253,7 @@ export default function NewOrderPage() {
   };
 
   return (
-    <>
+    <section>
       {/* Admin restriction popup */}
       <Dialog open={showAdminPopup} onOpenChange={setShowAdminPopup}>
         <DialogContent className="sm:max-w-md">
@@ -266,8 +266,8 @@ export default function NewOrderPage() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
       <div className="space-y-6">
-    <div className="space-y-6">
       {/* Header */}
       <div>
         <h1 className="text-2xl font-bold bg-gradient-to-r from-teal-400 to-emerald-400 bg-clip-text text-transparent">
@@ -550,7 +550,7 @@ export default function NewOrderPage() {
           </Card>
         </div>
       </div>
-    
-    </>
+      </div>
+    </section>
   );
 }
