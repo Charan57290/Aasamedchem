@@ -155,18 +155,7 @@ export default function LoginPage() {
             </Link>
           </div>
 
-          {/* Seed accounts helper hint */}
-          <div className="mt-8 p-3 rounded-lg bg-slate-950/40 border border-slate-800/60 text-[11px] text-slate-400 space-y-1.5">
-            <p className="font-semibold text-slate-300">Test Accounts:</p>
-            <div className="flex justify-between items-center">
-              <span>Admin: <strong className="text-teal-400">admin@test.com</strong> / admin123</span>
-              <Badge variant="outline" className="text-[9px] px-1 py-0 text-teal-400 border-teal-500/20 bg-teal-500/5">ADMIN</Badge>
-            </div>
-            <div className="flex justify-between items-center">
-              <span>User: <strong className="text-emerald-400">seller@test.com</strong> / seller123</span>
-              <Badge variant="outline" className="text-[9px] px-1 py-0 text-emerald-400 border-emerald-500/20 bg-emerald-500/5">USER</Badge>
-            </div>
-          </div>
+
         </CardContent>
       </Card>
     </div>
