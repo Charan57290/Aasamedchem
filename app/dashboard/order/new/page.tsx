@@ -5,6 +5,14 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
 import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import {
   Search,
   ShoppingCart,
   Trash2,
@@ -57,6 +65,8 @@ interface CartItem {
 export default function NewOrderPage() {
   const router = useRouter();
   const { data: session } = useSession();
+  const isAdmin = session?.user?.role === "ADMIN";
+  const [showAdminPopup, setShowAdminPopup] = useState(false);
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
@@ -65,12 +75,35 @@ export default function NewOrderPage() {
   const [submitting, setSubmitting] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
 
+  // Show popup if admin tries to access order page
+  useEffect(() => {
+    if (isAdmin) {
+      setShowAdminPopup(true);
+    }
+  }, [isAdmin]);
+
   // Scope the cart key in localStorage to the user's email to avoid mixing cart items between users
   const cartKey = session?.user?.email ? `cart_${session.user.email}` : null;
 
+  // If admin, show popup and prevent order creation
+  if (isAdmin) {
+    return (
+      <Dialog open={showAdminPopup} onOpenChange={setShowAdminPopup}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Access Denied</DialogTitle>
+            <DialogDescription>Admins cannot place orders via this page.</DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button onClick={() => setShowAdminPopup(false)}>Close</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    );
+  }
+
   // Load cart from localStorage on mount (once user session is available)
   useEffect(() => {
-    if (!cartKey) return;
     const saved = localStorage.getItem(cartKey);
     if (saved) {
       try {
