@@ -75,32 +75,10 @@ export default function NewOrderPage() {
   const [submitting, setSubmitting] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
 
-  // Show popup if admin tries to access order page
-  useEffect(() => {
-    if (isAdmin) {
-      setShowAdminPopup(true);
-    }
-  }, [isAdmin]);
+
 
   // Scope the cart key in localStorage to the user's email to avoid mixing cart items between users
   const cartKey = session?.user?.email ? `cart_${session.user.email}` : null;
-
-  // If admin, show popup and prevent order creation
-  if (isAdmin) {
-    return (
-      <Dialog open={showAdminPopup} onOpenChange={setShowAdminPopup}>
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle>Access Denied</DialogTitle>
-            <DialogDescription>Admins cannot place orders via this page.</DialogDescription>
-          </DialogHeader>
-          <DialogFooter>
-            <Button onClick={() => setShowAdminPopup(false)}>Close</Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-    );
-  }
 
   // Load cart from localStorage on mount (once user session is available)
   useEffect(() => {
@@ -220,6 +198,12 @@ export default function NewOrderPage() {
       return;
     }
 
+    // Admin restriction: show popup instead of submitting
+    if (isAdmin) {
+      setShowAdminPopup(true);
+      return;
+    }
+
     // Check for 0 quantities
     const zeroQtyItem = cart.find((item) => {
       const qty = parseFloat(item.quantity);
@@ -269,6 +253,20 @@ export default function NewOrderPage() {
   };
 
   return (
+    <>
+      {/* Admin restriction popup */}
+      <Dialog open={showAdminPopup} onOpenChange={setShowAdminPopup}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Access Denied</DialogTitle>
+            <DialogDescription>Admins cannot place orders via this page.</DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button onClick={() => setShowAdminPopup(false)}>Close</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+      <div className="space-y-6">
     <div className="space-y-6">
       {/* Header */}
       <div>
@@ -553,5 +551,6 @@ export default function NewOrderPage() {
         </div>
       </div>
     </div>
+    </>
   );
 }
