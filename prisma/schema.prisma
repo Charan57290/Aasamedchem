@@ -1,0 +1,85 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  ADMIN
+  USER
+}
+
+enum Unit {
+  g
+  kg
+  L
+  mL
+  unit
+}
+
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  REJECTED
+}
+
+model User {
+  id        String   @id @default(uuid()) @db.Uuid
+  email     String   @unique
+  password  String
+  role      Role     @default(USER)
+  name      String
+  createdAt DateTime @default(now())
+  orders    Order[]
+
+  @@map("users")
+}
+
+model Product {
+  id          String      @id @default(uuid()) @db.Uuid
+  name        String
+  sku         String      @unique
+  description String?     @db.Text
+  category    String
+  baseUnit    Unit
+  basePrice   Decimal     @db.Decimal(20, 8)
+  stock       Decimal     @db.Decimal(20, 8)
+  isActive    Boolean     @default(true)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  orderItems  OrderItem[]
+
+  @@map("products")
+}
+
+model Order {
+  id          String      @id @default(uuid()) @db.Uuid
+  userId      String      @db.Uuid
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  status      OrderStatus @default(PENDING)
+  totalAmount Decimal     @db.Decimal(20, 8)
+  notes       String?     @db.Text
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  items       OrderItem[]
+
+  @@map("orders")
+}
+
+model OrderItem {
+  id          String   @id @default(uuid()) @db.Uuid
+  orderId     String   @db.Uuid
+  order       Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId   String   @db.Uuid
+  product     Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  orderedUnit Unit
+  orderedQty  Decimal  @db.Decimal(20, 8)
+  storedQty   Decimal  @db.Decimal(20, 8)
+  unitPrice   Decimal  @db.Decimal(20, 8)
+  lineTotal   Decimal  @db.Decimal(20, 8)
+
+  @@map("order_items")
+}
