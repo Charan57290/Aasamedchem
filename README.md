@@ -202,19 +202,12 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ## 🚀 Vercel Deployment
 
-1. Sign in to [Vercel](https://vercel.com) and click **Add New > Project**.
-2. Import your GitHub repository `Charan57290/Aasamedchem`.
-3. Set the following **Environment Variables** in Vercel project settings:
-   - `DATABASE_URL` — Your Neon PostgreSQL connection string
-   - `NEXTAUTH_SECRET` — A secure random string (use `openssl rand -hex 32`)
-   - `NEXTAUTH_URL` — Your Vercel deployment URL (e.g. `https://aasamedchem-mu.vercel.app`)
-4. Set the **Build Command** to:
-   ```
-   prisma generate && next build
-   ```
-5. Click **Deploy**.
+The app is live and deployed on Vercel:
+
+🌐 **[https://aasamedchem-mu.vercel.app](https://aasamedchem-mu.vercel.app)**
 
 ---
+
 
 ## 📖 Feature Guide
 
