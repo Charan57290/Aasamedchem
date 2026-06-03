@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
 import {
@@ -55,12 +56,38 @@ interface CartItem {
 
 export default function NewOrderPage() {
   const router = useRouter();
+  const { data: session } = useSession();
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [cart, setCart] = useState<CartItem[]>([]);
   const [notes, setNotes] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  // Scope the cart key in localStorage to the user's email to avoid mixing cart items between users
+  const cartKey = session?.user?.email ? `cart_${session.user.email}` : null;
+
+  // Load cart from localStorage on mount (once user session is available)
+  useEffect(() => {
+    if (!cartKey) return;
+    const saved = localStorage.getItem(cartKey);
+    if (saved) {
+      try {
+        setCart(JSON.parse(saved));
+      } catch (err) {
+        console.error("Failed to parse cart", err);
+      }
+    }
+    setIsLoaded(true);
+  }, [cartKey]);
+
+  // Save cart to localStorage when it changes (only after initial load has completed)
+  useEffect(() => {
+    if (isLoaded && cartKey) {
+      localStorage.setItem(cartKey, JSON.stringify(cart));
+    }
+  }, [cart, isLoaded, cartKey]);
 
   // Fetch active products
   useEffect(() => {
