@@ -2,6 +2,8 @@
 
 A high-precision, full-stack inventory and order management platform built for chemical, scientific, and general warehousing businesses. Supports dual roles — **Admin** and **Seller** — with real-time unit conversion pricing, cart-based ordering, and a full order lifecycle.
 
+🌐 **Live Demo**: [https://aasamedchem-mu.vercel.app](https://aasamedchem-mu.vercel.app)
+
 ---
 
 ## 🚀 Tech Stack
@@ -205,7 +207,7 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 3. Set the following **Environment Variables** in Vercel project settings:
    - `DATABASE_URL` — Your Neon PostgreSQL connection string
    - `NEXTAUTH_SECRET` — A secure random string (use `openssl rand -hex 32`)
-   - `NEXTAUTH_URL` — Your Vercel deployment URL (e.g. `https://aasamedchem.vercel.app`)
+   - `NEXTAUTH_URL` — Your Vercel deployment URL (e.g. `https://aasamedchem-mu.vercel.app`)
 4. Set the **Build Command** to:
    ```
    prisma generate && next build
