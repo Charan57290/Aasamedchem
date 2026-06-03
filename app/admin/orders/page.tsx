@@ -274,7 +274,7 @@ export default function AdminOrdersPage() {
 
       {/* ORDER DETAILS DIALOG */}
       <Dialog open={isDetailOpen} onOpenChange={setIsDetailOpen}>
-        <DialogContent className="bg-slate-900 border-slate-800 text-slate-100 max-w-2xl overflow-y-auto max-h-[90vh]">
+        <DialogContent className="bg-slate-900 border-slate-800 text-slate-100 sm:max-w-4xl w-full overflow-y-auto max-h-[90vh]">
           <DialogHeader>
             <DialogTitle className="text-lg font-bold text-slate-100">
               Order Details

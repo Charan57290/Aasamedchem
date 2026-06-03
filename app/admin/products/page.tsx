@@ -423,7 +423,7 @@ export default function AdminProductsPage() {
 
       {/* ADD DIALOG */}
       <Dialog open={isAddOpen} onOpenChange={setIsAddOpen}>
-        <DialogContent className="bg-slate-900 border-slate-800 text-slate-100 max-w-lg">
+        <DialogContent className="bg-slate-900 border-slate-800 text-slate-100 sm:max-w-lg w-full">
           <DialogHeader>
             <DialogTitle className="text-lg font-bold text-slate-100">
               Add New Product
@@ -579,7 +579,7 @@ export default function AdminProductsPage() {
 
       {/* EDIT DIALOG */}
       <Dialog open={isEditOpen} onOpenChange={setIsEditOpen}>
-        <DialogContent className="bg-slate-900 border-slate-800 text-slate-100 max-w-lg">
+        <DialogContent className="bg-slate-900 border-slate-800 text-slate-100 sm:max-w-lg w-full">
           <DialogHeader>
             <DialogTitle className="text-lg font-bold text-slate-100">
               Edit Product
@@ -744,7 +744,7 @@ export default function AdminProductsPage() {
 
       {/* DELETE CONFIRM DIALOG */}
       <Dialog open={isDeleteOpen} onOpenChange={setIsDeleteOpen}>
-        <DialogContent className="bg-slate-900 border-slate-800 text-slate-100">
+        <DialogContent className="bg-slate-900 border-slate-800 text-slate-100 sm:max-w-md w-full">
           <DialogHeader>
             <DialogTitle className="text-lg font-bold text-rose-500">
               Confirm Delete Product
