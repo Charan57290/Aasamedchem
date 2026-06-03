@@ -93,7 +93,7 @@ export default function SellerProductsPage() {
             <span className="text-slate-400 text-sm whitespace-nowrap">
               Category:
             </span>
-            <Select value={categoryFilter} onValueChange={setCategoryFilter}>
+            <Select value={categoryFilter} onValueChange={(val) => setCategoryFilter(val || "all")}>
               <SelectTrigger className="bg-slate-950/60 border-slate-800 text-slate-100 w-full md:w-[180px] focus:ring-teal-500">
                 <SelectValue placeholder="All Categories" />
               </SelectTrigger>

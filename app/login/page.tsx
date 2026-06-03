@@ -8,6 +8,7 @@ import { toast } from "react-hot-toast";
 import { Card, CardHeader, CardContent, CardTitle, CardDescription } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 
 export default function LoginPage() {
   const router = useRouter();

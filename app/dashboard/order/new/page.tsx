@@ -31,6 +31,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { formatINR, getCompatibleUnits, getConversionFactor } from "@/lib/units";
+import { Badge } from "@/components/ui/badge";
 
 interface Product {
   id: string;
@@ -353,7 +354,7 @@ export default function NewOrderPage() {
                                 <Select
                                   value={item.unit}
                                   onValueChange={(val) =>
-                                    updateCartItem(item.product.id, item.quantity, val)
+                                    updateCartItem(item.product.id, item.quantity, val || item.product.baseUnit)
                                   }
                                 >
                                   <SelectTrigger className="bg-slate-950/80 border-slate-800 text-slate-200 h-8 text-xs focus:ring-teal-500">

@@ -30,6 +30,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { formatINR } from "@/lib/units";
+import { cn } from "@/lib/utils";
 
 interface OrderItem {
   id: string;
@@ -126,7 +127,7 @@ export default function SellerOrdersHistoryPage() {
             <span className="text-slate-400 text-sm whitespace-nowrap">
               Fulfillment Status:
             </span>
-            <Select value={statusFilter} onValueChange={setStatusFilter}>
+            <Select value={statusFilter} onValueChange={(val) => setStatusFilter(val || "all")}>
               <SelectTrigger className="bg-slate-950/60 border-slate-800 text-slate-100 w-full md:w-[150px] focus:ring-teal-500">
                 <SelectValue placeholder="All Orders" />
               </SelectTrigger>
