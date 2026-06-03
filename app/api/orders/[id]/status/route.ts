@@ -65,6 +65,9 @@ export async function PATCH(
           },
         },
       });
+    }, {
+      maxWait: 15000,
+      timeout: 30000,
     });
 
     return NextResponse.json(result);
