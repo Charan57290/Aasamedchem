@@ -550,7 +550,7 @@ export default function NewOrderPage() {
           </Card>
         </div>
       </div>
-    </div>
+    
     </>
   );
 }
