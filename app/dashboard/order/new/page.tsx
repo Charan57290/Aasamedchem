@@ -104,6 +104,11 @@ export default function NewOrderPage() {
 
   // Load cart from localStorage on mount (once user session is available)
   useEffect(() => {
+    if (!cartKey) {
+      // No user email yet, just mark as loaded
+      setIsLoaded(true);
+      return;
+    }
     const saved = localStorage.getItem(cartKey);
     if (saved) {
       try {
