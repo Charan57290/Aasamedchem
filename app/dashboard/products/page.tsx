@@ -27,7 +27,7 @@ interface Product {
   isActive: boolean;
 }
 
-export default function SellerProductsPage() {
+export default function UserProductsPage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");

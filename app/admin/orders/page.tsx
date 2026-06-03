@@ -197,7 +197,7 @@ export default function AdminOrdersPage() {
                     Order ID
                   </TableHead>
                   <TableHead className="text-slate-300 font-semibold">
-                    Seller / Buyer
+                    User / Buyer
                   </TableHead>
                   <TableHead className="text-slate-300 font-semibold text-center">
                     Status
@@ -290,7 +290,7 @@ export default function AdminOrdersPage() {
               <div className="grid grid-cols-2 gap-4 p-3.5 rounded-lg bg-slate-950/60 border border-slate-800 text-sm">
                 <div>
                   <span className="text-xs text-slate-500 block uppercase font-semibold">
-                    Customer / Seller
+                    Customer / User
                   </span>
                   <span className="font-semibold text-slate-200">
                     {selectedOrder.user.name}
@@ -399,7 +399,7 @@ export default function AdminOrdersPage() {
               {selectedOrder.notes && (
                 <div className="space-y-1 p-3 rounded-lg bg-slate-950/60 border border-slate-800">
                   <span className="text-xs text-slate-500 block uppercase font-semibold">
-                    Seller Notes / Instructions
+                    User Notes / Instructions
                   </span>
                   <p className="text-slate-300 text-sm whitespace-pre-wrap leading-relaxed">
                     {selectedOrder.notes}

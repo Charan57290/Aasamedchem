@@ -1,21 +1,22 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { signIn, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { Mail, Lock, Shield, Loader2 } from "lucide-react";
+import { Mail, Lock, User, Shield, Loader2 } from "lucide-react";
 import { toast } from "react-hot-toast";
 import { Card, CardHeader, CardContent, CardTitle, CardDescription } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 
-export default function LoginPage() {
+export default function RegisterPage() {
   const router = useRouter();
   const { data: session, status } = useSession();
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
   // If already logged in, redirect accordingly
@@ -31,32 +32,44 @@ export default function LoginPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!email || !password) {
+
+    if (!name || !email || !password || !confirmPassword) {
       toast.error("Please fill in all fields.");
       return;
     }
 
+    if (password !== confirmPassword) {
+      toast.error("Passwords do not match.");
+      return;
+    }
+
+    if (password.length < 6) {
+      toast.error("Password must be at least 6 characters.");
+      return;
+    }
+
     setLoading(true);
-    const loadingToast = toast.loading("Logging you in...");
+    const loadingToast = toast.loading("Creating your account...");
 
     try {
-      const res = await signIn("credentials", {
-        redirect: false,
-        email,
-        password,
+      const res = await fetch("/api/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, password }),
       });
 
+      const data = await res.json();
       toast.dismiss(loadingToast);
 
-      if (res?.error) {
-        toast.error(res.error || "Invalid credentials.");
-      } else {
-        toast.success("Successfully logged in!");
-        // The useEffect above will handle redirection
+      if (!res.ok) {
+        throw new Error(data.error || "Failed to register.");
       }
+
+      toast.success("Account created successfully! Please log in.");
+      router.push("/login");
     } catch (err: any) {
       toast.dismiss(loadingToast);
-      toast.error("An error occurred during sign in.");
+      toast.error(err.message || "An error occurred during registration.");
     } finally {
       setLoading(false);
     }
@@ -75,7 +88,7 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-slate-950 relative overflow-hidden px-4">
-      {/* Decorative background glows */}
+      {/* Background glow effects */}
       <div className="absolute top-1/4 left-1/4 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-teal-500/10 rounded-full blur-[120px] pointer-events-none" />
       <div className="absolute bottom-1/4 right-1/4 translate-x-1/2 translate-y-1/2 w-96 h-96 bg-emerald-500/10 rounded-full blur-[120px] pointer-events-none" />
 
@@ -87,14 +100,30 @@ export default function LoginPage() {
             </div>
           </div>
           <CardTitle className="text-2xl font-bold bg-gradient-to-r from-teal-400 to-emerald-400 bg-clip-text text-transparent">
-            Asa Medchem
+            Create Account
           </CardTitle>
           <CardDescription className="text-slate-400 text-sm">
-            Inventory & Order Management System
+            Register as a new User to browse catalog and place orders.
           </CardDescription>
         </CardHeader>
         <CardContent className="pb-8">
           <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="space-y-2">
+              <label className="text-xs font-semibold text-slate-300 uppercase tracking-wider">
+                Full Name
+              </label>
+              <div className="relative">
+                <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4.5 w-4.5 text-slate-500" />
+                <Input
+                  placeholder="John Doe"
+                  className="pl-10 bg-slate-950/60 border-slate-800 text-slate-100 placeholder:text-slate-600 focus-visible:ring-teal-500 focus-visible:ring-offset-slate-950"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  disabled={loading}
+                />
+              </div>
+            </div>
+
             <div className="space-y-2">
               <label className="text-xs font-semibold text-slate-300 uppercase tracking-wider">
                 Email Address
@@ -120,10 +149,27 @@ export default function LoginPage() {
                 <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4.5 w-4.5 text-slate-500" />
                 <Input
                   type="password"
-                  placeholder="••••••••"
+                  placeholder="Minimum 6 characters"
                   className="pl-10 bg-slate-950/60 border-slate-800 text-slate-100 placeholder:text-slate-600 focus-visible:ring-teal-500 focus-visible:ring-offset-slate-950"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
+                  disabled={loading}
+                />
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-xs font-semibold text-slate-300 uppercase tracking-wider">
+                Confirm Password
+              </label>
+              <div className="relative">
+                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4.5 w-4.5 text-slate-500" />
+                <Input
+                  type="password"
+                  placeholder="Repeat your password"
+                  className="pl-10 bg-slate-950/60 border-slate-800 text-slate-100 placeholder:text-slate-600 focus-visible:ring-teal-500 focus-visible:ring-offset-slate-950"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
                   disabled={loading}
                 />
               </div>
@@ -137,35 +183,23 @@ export default function LoginPage() {
               {loading ? (
                 <div className="flex items-center justify-center gap-2">
                   <Loader2 className="h-4 w-4 animate-spin" />
-                  <span>Signing In...</span>
+                  <span>Registering...</span>
                 </div>
               ) : (
-                "Sign In"
+                "Register"
               )}
             </Button>
           </form>
 
-          <div className="mt-4 text-center text-xs text-slate-400">
-            <span>Don&apos;t have an account? </span>
+          {/* Links back to login */}
+          <div className="mt-6 text-center text-xs text-slate-400">
+            <span>Already have an account? </span>
             <Link
-              href="/register"
+              href="/login"
               className="text-teal-400 font-semibold hover:underline"
             >
-              Register Here
+              Sign In
             </Link>
-          </div>
-
-          {/* Seed accounts helper hint */}
-          <div className="mt-8 p-3 rounded-lg bg-slate-950/40 border border-slate-800/60 text-[11px] text-slate-400 space-y-1.5">
-            <p className="font-semibold text-slate-300">Test Accounts:</p>
-            <div className="flex justify-between items-center">
-              <span>Admin: <strong className="text-teal-400">admin@test.com</strong> / admin123</span>
-              <Badge variant="outline" className="text-[9px] px-1 py-0 text-teal-400 border-teal-500/20 bg-teal-500/5">ADMIN</Badge>
-            </div>
-            <div className="flex justify-between items-center">
-              <span>User: <strong className="text-emerald-400">seller@test.com</strong> / seller123</span>
-              <Badge variant="outline" className="text-[9px] px-1 py-0 text-emerald-400 border-emerald-500/20 bg-emerald-500/5">USER</Badge>
-            </div>
           </div>
         </CardContent>
       </Card>

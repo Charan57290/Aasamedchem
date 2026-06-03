@@ -57,7 +57,7 @@ interface Order {
   items: OrderItem[];
 }
 
-export default function SellerOrdersHistoryPage() {
+export default function UserOrdersHistoryPage() {
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");

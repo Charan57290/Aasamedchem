@@ -142,10 +142,10 @@ export function Sidebar() {
             </div>
           )}
 
-          {/* User/Seller Panel Section */}
+          {/* User Panel Section */}
           <div>
             <div className="px-3 mb-2 text-xs font-semibold text-slate-400 uppercase tracking-wider">
-              {role === "ADMIN" ? "Seller Panel Preview" : "Seller Panel"}
+              {role === "ADMIN" ? "User Panel Preview" : "User Panel"}
             </div>
             <ul className="space-y-1">
               {sellerLinks.map((link) => {
@@ -206,7 +206,7 @@ export function Sidebar() {
             <span>Sign Out</span>
           </Button>
         </div>
-      </</aside>
+      </aside>
     </>
   );
 }

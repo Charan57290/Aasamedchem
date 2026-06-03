@@ -713,7 +713,7 @@ export default function AdminProductsPage() {
                 }
               />
               <label htmlFor="isActive" className="text-xs font-semibold text-slate-300 cursor-pointer">
-                Product is active and visible to Sellers
+                Product is active and visible to Users
               </label>
             </div>
 
