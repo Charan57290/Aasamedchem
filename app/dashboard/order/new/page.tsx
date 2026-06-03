@@ -47,7 +47,7 @@ interface Product {
 
 interface CartItem {
   product: Product;
-  quantity: number;
+  quantity: string;
   unit: string;
   unitPrice: number;
   lineTotal: number;
@@ -97,10 +97,10 @@ export default function NewOrderPage() {
     }
 
     const defaultUnit = product.baseUnit;
-    const defaultQty = 1;
+    const defaultQty = "1";
     const factor = getConversionFactor(product.baseUnit, defaultUnit);
     const unitPrice = parseFloat(product.basePrice) * factor;
-    const lineTotal = defaultQty * unitPrice;
+    const lineTotal = 1 * unitPrice;
 
     setCart([
       ...cart,
@@ -121,22 +121,22 @@ export default function NewOrderPage() {
   };
 
   // Update item in cart (quantity or unit change)
-  const updateCartItem = (productId: string, quantity: number, unit: string) => {
+  const updateCartItem = (productId: string, quantity: string, unit: string) => {
     setCart(
       cart.map((item) => {
         if (item.product.id !== productId) return item;
 
-        // Ensure safe quantity
-        const safeQty = quantity < 0 ? 0 : quantity;
+        const parsed = parseFloat(quantity);
+        const qtyNum = isNaN(parsed) || parsed < 0 ? 0 : parsed;
 
         // Recalculate conversions
         const factor = getConversionFactor(item.product.baseUnit, unit);
         const unitPrice = parseFloat(item.product.basePrice) * factor;
-        const lineTotal = safeQty * unitPrice;
+        const lineTotal = qtyNum * unitPrice;
 
         return {
           ...item,
-          quantity: safeQty,
+          quantity,
           unit,
           unitPrice,
           lineTotal,
@@ -156,7 +156,10 @@ export default function NewOrderPage() {
     }
 
     // Check for 0 quantities
-    const zeroQtyItem = cart.find((item) => item.quantity <= 0);
+    const zeroQtyItem = cart.find((item) => {
+      const qty = parseFloat(item.quantity);
+      return isNaN(qty) || qty <= 0;
+    });
     if (zeroQtyItem) {
       toast.error(`Please enter a valid quantity for "${zeroQtyItem.product.name}".`);
       return;
@@ -168,7 +171,7 @@ export default function NewOrderPage() {
     try {
       const orderItems = cart.map((item) => ({
         productId: item.product.id,
-        orderedQty: item.quantity,
+        orderedQty: parseFloat(item.quantity),
         orderedUnit: item.unit,
       }));
 
@@ -377,18 +380,19 @@ export default function NewOrderPage() {
                               {/* Quantity field */}
                               <TableCell className="py-3.5">
                                 <Input
-                                  type="number"
-                                  min="0.00000001"
-                                  step="any"
+                                  type="text"
                                   className="h-8 bg-slate-950/80 border-slate-800 text-slate-200 focus-visible:ring-teal-500 focus-visible:ring-offset-slate-950 text-xs"
-                                  value={item.quantity === 0 ? "" : item.quantity}
+                                  value={item.quantity}
                                   onChange={(e) => {
-                                    const val = parseFloat(e.target.value);
-                                    updateCartItem(
-                                      item.product.id,
-                                      isNaN(val) ? 0 : val,
-                                      item.unit
-                                    );
+                                    const val = e.target.value;
+                                    // Regex: allows empty string, digits, and at most one decimal point
+                                    if (val === "" || /^[0-9]*\.?[0-9]*$/.test(val)) {
+                                      updateCartItem(
+                                        item.product.id,
+                                        val,
+                                        item.unit
+                                      );
+                                    }
                                   }}
                                 />
                               </TableCell>
